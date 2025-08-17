@@ -98,7 +98,7 @@ export default function SignUpPage() {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     // Validate passwords match on step 1
@@ -117,9 +117,26 @@ export default function SignUpPage() {
       setCurrentStep(currentStep + 1);
     } else {
       console.log('Form submitted:', formData);
-      // Here you would typically send the data to your backend
       
-      alert('Parking spot listing submitted successfully!');
+      try {
+        // Send data to backend API
+        const res = await fetch('/api/auth/signup', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(formData)
+        });
+
+        const data = await res.json();
+        
+        if (res.ok) {
+          alert('Parking spot listing submitted successfully! Check your email for verification.');
+        } else {
+          alert(data.error || 'An error occurred during signup. Please try again.');
+        }
+      } catch (error) {
+        console.error('Signup error:', error);
+        alert('Network error. Please check your connection and try again.');
+      }
     }
   };
 
@@ -202,7 +219,7 @@ export default function SignUpPage() {
                                 required
                                 value={formData.firstName}
                                 onChange={(e) => handleInputChange('firstName', e.target.value)}
-                                className="w-full px-3 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                className="w-full px-3 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-700"
                                 placeholder="Enter your first name"
                               />
                             </div>
@@ -215,7 +232,7 @@ export default function SignUpPage() {
                                 required
                                 value={formData.lastName}
                                 onChange={(e) => handleInputChange('lastName', e.target.value)}
-                                className="w-full px-3 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                className="text-gray-700 w-full px-3 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                 placeholder="Enter your last name"
                               />
                             </div>
@@ -229,7 +246,7 @@ export default function SignUpPage() {
                               required
                               value={formData.email}
                               onChange={(e) => handleInputChange('email', e.target.value)}
-                              className="w-full px-3 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                              className="text-gray-700 w-full px-3 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                               placeholder="Enter your email address"
                             />
                           </div>
@@ -243,7 +260,7 @@ export default function SignUpPage() {
                                 required
                                 value={formData.password}
                                 onChange={(e) => handleInputChange('password', e.target.value)}
-                                className="w-full px-3 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                className="text-gray-700 w-full px-3 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                 placeholder="Enter your password"
                                 minLength={6}
                               />
@@ -257,7 +274,7 @@ export default function SignUpPage() {
                                 required
                                 value={formData.confirmPassword}
                                 onChange={(e) => handleInputChange('confirmPassword', e.target.value)}
-                                className={`w-full px-3 py-3 border rounded-md focus:outline-none focus:ring-2 focus:border-transparent ${
+                                className={` text-gray-700 w-full px-3 py-3 border rounded-md focus:outline-none focus:ring-2 focus:border-transparent ${
                                   formData.confirmPassword && formData.password !== formData.confirmPassword 
                                     ? 'border-red-300 focus:ring-red-500' 
                                     : 'border-gray-300 focus:ring-blue-500'
@@ -287,7 +304,7 @@ export default function SignUpPage() {
                               required
                               value={formData.address.street}
                               onChange={(e) => handleInputChange('address.street', e.target.value)}
-                              className="w-full px-3 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                              className="text-gray-700 w-full px-3 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                               placeholder="Enter street address"
                             />
                           </div>
@@ -301,7 +318,7 @@ export default function SignUpPage() {
                                 required
                                 value={formData.address.city}
                                 onChange={(e) => handleInputChange('address.city', e.target.value)}
-                                className="w-full px-3 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                className="text-gray-700 w-full px-3 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                 placeholder="City"
                               />
                             </div>
@@ -314,7 +331,7 @@ export default function SignUpPage() {
                                 required
                                 value={formData.address.state}
                                 onChange={(e) => handleInputChange('address.state', e.target.value)}
-                                className="w-full px-3 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                className="text-gray-700 w-full px-3 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                 placeholder="State"
                               />
                             </div>
@@ -327,7 +344,7 @@ export default function SignUpPage() {
                                 required
                                 value={formData.address.zipCode}
                                 onChange={(e) => handleInputChange('address.zipCode', e.target.value)}
-                                className="w-full px-3 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                className="text-gray-700 w-full px-3 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                 placeholder="ZIP"
                               />
                             </div>
@@ -353,7 +370,7 @@ export default function SignUpPage() {
                             required
                             value={formData.contactNo}
                             onChange={(e) => handleInputChange('contactNo', e.target.value)}
-                            className="w-full px-3 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                            className="text-gray-700 w-full px-3 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                             placeholder="Enter your contact number"
                           />
                         </div>
